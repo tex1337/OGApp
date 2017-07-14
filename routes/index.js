@@ -31,15 +31,15 @@ router.get('/load', function(req, res, next) {
 });
 
 router.get('/save', function(req, res, next){
-
+    res.render('index', {})
 });
 
 router.get('/new', function(req, res, next){
-
+    res.render('index', {})
 });
 
 router.get('/delete', function(req, res, next){
-
+    res.render('index', {})
 });
 
 module.exports = router;
