@@ -10,17 +10,21 @@ router.get('/', function(req, res, next){
     res.render('index');
 });
 
+router.get('/new', function (req, res) {
+   res.redirect('/', {filename: "New File"});
+});
+
 router.get('/load', function(req, res, next) {
     var data = [];
     mongo.connect(url, function(err, db){
         if (!err){
-            var item = db.collection('documents').find();
+            var item = db.collection('documents').find({});
             item.forEach(function(record, err){
                 if(!err){
                     data.push(record);
                 }
             }, function () {
-                res.render('index', {results: data});
+                res.render('index', {records: data});
                 db.close();
                 console.log(data);
             });
@@ -28,18 +32,6 @@ router.get('/load', function(req, res, next) {
             console.log(err);
         }
     });
-});
-
-router.get('/save', function(req, res, next){
-    res.render('index', {})
-});
-
-router.get('/new', function(req, res, next){
-    res.render('index', {})
-});
-
-router.get('/delete', function(req, res, next){
-    res.render('index', {})
 });
 
 module.exports = router;
