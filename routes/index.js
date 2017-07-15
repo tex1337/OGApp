@@ -7,11 +7,7 @@ var url = 'mongodb://tech1337:asshole@ds159112.mlab.com:59112/ogapp';
 /* GET home page. */
 
 router.get('/', function(req, res, next){
-    res.render('index');
-});
-
-router.get('/new', function (req, res) {
-   res.render('index', {filename: "New File"});
+    res.render('index', {filename: "New File"});
 });
 
 router.get('/load/:fname', function(req, res, next) {
@@ -27,10 +23,14 @@ router.get('/load/:fname', function(req, res, next) {
             if(data.length > 0){
                 res.render('index', {filename: data[0].filename, imgJSON: JSON.stringify(data[0].canvasJSON) });
             } else {
-                res.render('index', {filename: "Error!!!"});
+                res.render('error', {
+                    message: "File Not Found!",
+                    error:{
+                        status: 'No file named: "' + req.params.fname + '" in DB.'
+                    }
+                });
             }
             db.close();
-            console.log(data);
         });
 
     });

@@ -4,10 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongo = require('mongodb');
+var mongo = require('mongodb').MongoClient;
 
 var index = require('./routes/index');
-
+var dburl = 'mongodb://tech1337:asshole@ds159112.mlab.com:59112/ogapp';
 var app = express();
 
 // view engine setup
@@ -24,9 +24,43 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 
-app.post('/save', function(req, res){
-    var data = req.body;
-    res.render('save', {filename: data.filename});
+app.post('/', function(req, res){
+    // When we get some POST, do the requested action
+    var action = req.body.actionlist;
+    var fname = req.body.filename;
+    var jsonString = req.body.canvasJSON;
+
+    switch (action) {
+        case "Save":
+            // mongo.connect(dburl, function(err, db) {
+            //     if(!err){
+            //         db.documents.insert({
+            //             filename: fname,
+            //             canvasJSON: jsonString
+            //         });
+            //     }
+            //     db.close();
+            // });
+            console.log(jsonString);
+            res.redirect("/load/" + fname);
+            break;
+
+        case "Load":
+            res.redirect("/load/" + fname);
+            break;
+
+        case "Delete":
+            break;
+
+        default:
+            res.render('error', {
+                message: "Failed to commit action: " + action,
+                error:{
+                    status: "Couldn't " +  action + " file: '" + fname +"'. Please try again!"
+                }
+            });
+            break;
+    }
 });
 
 // catch 404 and forward to error handler

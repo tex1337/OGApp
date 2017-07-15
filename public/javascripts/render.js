@@ -54,6 +54,11 @@ canv.style.border = "3px solid black";
 function doUpdate(){
     layer.add(Circles);
     stage.add(layer);
+    try{
+        document.getElementsByName('canvasJSON').value = "FUXXORED"
+    } catch (error){
+        console.log("Failed to find the hidden input!");
+    }
 }
 
 
