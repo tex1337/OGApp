@@ -23,38 +23,28 @@ var inputArea = new Konva.Rect({
     fill: 'white'
 });
 
-layer.add(inputArea).draw();
-stage.add(layer);
-
 // Storage for all circles on layer
 var Circles = new Konva.Group();
 
-// A sample circle to test the functionality of Konva
-// var testCircle = new Konva.Circle({
-//     x: stage.getWidth() / 2,
-//     y: stage.getHeight() / 2,
-//     radius: 50,
-//     fill: 'yellow',
-//     stroke: 'black',
-//     strokeWidth: 4,
-//     draggable: true
-// });
+layer.add(inputArea).draw();
+stage.add(layer);
 
-// Push test to image group
-//Circles.add(testCircle);
-
-// Detect mouseevent click on inputArea
+// EventHandler click on inputArea
 inputArea.on('click', function(e) {
     // If this triggered, we weren't in a circle
     // so bash a new one out, only on left-mouse.
     if(e.evt.button === 0){
         circleFactory(e.evt.clientX, e.evt.clientY);
+        doUpdate();
     }
 
 });
 
-// Run view update
-doUpdate();
+// <canvas> is dynamically gen, need this to add CSS to the DOM element.
+var canv = document.querySelector('canvas');
+canv.style.border = "3px solid black";
+
+
 
 
 // Function DoUpdate():
@@ -66,6 +56,10 @@ function doUpdate(){
     stage.add(layer);
 }
 
+
+// Function circleFactory
+// Takes coordinates (x, y) and creates a new Circle
+// object on the layer group
 function circleFactory(X, Y){
 
     var newCirc = new Konva.Circle({
@@ -92,7 +86,3 @@ function circleFactory(X, Y){
     Circles.add(newCirc);
     doUpdate();
 }
-
-// <canvas> is dynamically gen, need this to add CSS to the DOM element.
-var canv = document.querySelector('canvas');
-canv.style.border = "3px solid black";

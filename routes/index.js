@@ -11,26 +11,28 @@ router.get('/', function(req, res, next){
 });
 
 router.get('/new', function (req, res) {
-   res.redirect('/', {filename: "New File"});
+   res.render('index', {filename: "New File"});
 });
 
-router.get('/load', function(req, res, next) {
+router.get('/load/:fname', function(req, res, next) {
     var data = [];
     mongo.connect(url, function(err, db){
-        if (!err){
-            var item = db.collection('documents').find({});
-            item.forEach(function(record, err){
-                if(!err){
-                    data.push(record);
-                }
-            }, function () {
-                res.render('index', {records: data});
-                db.close();
-                console.log(data);
-            });
-        } else {
-            console.log(err);
-        }
+
+        var items = db.collection('documents').find({filename: req.params.fname});
+        items.forEach(function(record, err){
+            if(!err){
+                data.push(record);
+            }
+        }, function () {
+            if(data.length > 0){
+                res.render('index', {filename: data[0].filename, imgJSON: JSON.stringify(data[0].canvasJSON) });
+            } else {
+                res.render('index', {filename: "Error!!!"});
+            }
+            db.close();
+            console.log(data);
+        });
+
     });
 });
 

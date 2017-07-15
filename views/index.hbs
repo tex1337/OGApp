@@ -1,6 +1,39 @@
 <div id="container"></div>
 
 <div id="crudForm">
-    
+    <form method="post">
+        <div class="fGroup">
+            <label for="filename">File Name:</label>
+            <input type="text" name="filename" value="{{#if filename}}{{ filename }}{{/if}}">
+        </div>
+
+        <div class="fGroup">
+            <label for="actionlist">Action:</label>
+            <span class="highlight">Save <input type="radio" name="actionlist" value="Save" checked></span>
+            <span class="highlight">Load <input type="radio" name="actionlist" value="Save"></span>
+            <span class="highlight">Delete <input type="radio" name="actionlist" value="Delete"></span>
+            <br>
+        </div>
+
+        <input type="submit">
+    </form>
 </div>
+
+<!--Initialise the canvas object for -->
 <script src="/javascripts/render.js"></script>
+
+<!--If the image JSON is available, extract the circles into the CURRENT stage.-->
+{{#if imgJSON }}
+    <script>
+        var shapes = {{{ imgJSON }}};
+        var circs = shapes.children[0].children;
+
+        // Skipping first element, which is the rectangle
+        for (var i = 1; i < circs.length; i++){
+            circleFactory(circs[i].attrs.x, circs[i].attrs.y);
+            doUpdate();
+        }
+
+        doUpdate();
+    </script>
+{{/if}}
