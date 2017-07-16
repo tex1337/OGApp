@@ -73,7 +73,7 @@ and removes it from the collection.
 
 ## Notes
 
-Please feel free to email me if you stumble across this and would like to
+Please feel free to open an issue or email me if you stumble across this and would like to
 let me know if there is a better solution, or if you find any bugs as I
 do try to make sure that I learn from mistakes and take heed of constructive
 criticism. Thanks in advance to you if you do decide to help me keep on
