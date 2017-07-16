@@ -93,11 +93,24 @@ app.post('/', function(req, res){
                 var msg = "";
                 if(!err){
                     msg = "Deleted file: " + doc.filename;
+                    res.render('error',
+                        {
+                            message: msg,
+                            error:{
+                                status: "Successfully deleted file from DB."
+                            }
+                        });
                 } else {
                     msg = "Failed to run query!";
+                    res.render('error', {
+                        messsage: msg,
+                        error:{
+                            status: "Failed to find " + fname + " in database"
+                        }
+                    });
                 }
 
-                res.render('error', {message: msg, error:{status: err}});
+
             });
             break;
 
