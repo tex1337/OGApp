@@ -54,8 +54,9 @@ canv.style.border = "3px solid black";
 function doUpdate(){
     layer.add(Circles);
     stage.add(layer);
+
     try{
-        document.getElementsByName('canvasJSON').value = "FUXXORED"
+        getImageJSON();
     } catch (error){
         console.log("Failed to find the hidden input!");
     }
@@ -90,4 +91,9 @@ function circleFactory(X, Y){
     // Push new circle and update the view
     Circles.add(newCirc);
     doUpdate();
+}
+
+function getImageJSON(){
+    var elem = document.getElementById('canvasJSON');
+    elem.value = stage.toJSON();
 }

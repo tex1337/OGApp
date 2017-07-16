@@ -4,11 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongo = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
+var Drawing = require('./Schema/drawing');
+
 
 var index = require('./routes/index');
-var dburl = 'mongodb://tech1337:asshole@ds159112.mlab.com:59112/ogapp';
+
 var app = express();
+
+// Database URL and Connect
+var dburl = 'mongodb://tech1337:asshole@ds159112.mlab.com:59112/ogapp';
+mongoose.connect(dburl, {useMongoClient: true});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,28 +34,71 @@ app.post('/', function(req, res){
     // When we get some POST, do the requested action
     var action = req.body.actionlist;
     var fname = req.body.filename;
-    var jsonString = req.body.canvasJSON;
+    var jsonString = req.body.canvas;
+
+    //Objectify database and handle errors in mongoose.
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error: '));
 
     switch (action) {
         case "Save":
-            // mongo.connect(dburl, function(err, db) {
-            //     if(!err){
-            //         db.documents.insert({
-            //             filename: fname,
-            //             canvasJSON: jsonString
-            //         });
-            //     }
-            //     db.close();
-            // });
-            console.log(jsonString);
-            res.redirect("/load/" + fname);
+            var newDrawing = {
+                filename: fname,
+                canvasJSON: jsonString
+            };
+
+            Drawing.findOneAndUpdate(
+                {"filename": fname},
+                newDrawing,
+                {upsert: true},
+                function(err, doc){
+                    if(err){
+                        res.render('error', {message: "Failed to run query!", error:{status:err}});
+                    } else {
+                        res.render('index',
+                            {
+                                filename: newDrawing.filename,
+                                imgJSON: newDrawing.canvasJSON,
+                                status: "Saved"}
+                            );
+                    }
+                }
+            );
+
             break;
 
         case "Load":
-            res.redirect("/load/" + fname);
+
+            Drawing.findOne({"filename": fname}, function(err, doc){
+               if(err){
+                   res.render('error', {message: "Failed to run query!", error:{status:err}});
+               }
+               if(doc === null){
+                   res.render('error', {message: "Query ran and returned no results", error:{status:err}});
+               } else {
+                   res.render('index',
+                       {
+                           filename: doc.filename,
+                           imgJSON: doc.canvasJSON,
+                           status: "Loaded"
+                       }
+                   );
+               }
+            });
+
             break;
 
         case "Delete":
+            Drawing.where({ "filename": fname }).findOneAndRemove(function(err, doc){
+                var msg = "";
+                if(!err){
+                    msg = "Deleted file: " + doc.filename;
+                } else {
+                    msg = "Failed to run query!";
+                }
+
+                res.render('error', {message: msg, error:{status: err}});
+            });
             break;
 
         default:

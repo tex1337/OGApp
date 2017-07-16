@@ -1,4 +1,7 @@
 <div class="wrapper">
+    {{#if status}}
+        <h1>{{ status }}</h1>
+    {{/if}}
     <div id="container"></div>
 
     <div id="crudForm">
@@ -16,7 +19,7 @@
                 <span class="highlight">Delete <input type="radio" name="actionlist" value="Delete"></span>
                 <br>
             </div>
-            <input type="hidden" name="canvasJSON">
+            <input type="hidden" name="canvas" id="canvasJSON">
             <input type="submit">
         </form>
     </div>
@@ -30,14 +33,14 @@
 {{#if imgJSON }}
     <script>
         var shapes = {{{ imgJSON }}};
-        var circs = shapes.children[0].children;
+        var circs = shapes.children[0].children[1].children;
 
         // Skipping first element, which is the rectangle
-        for (var i = 1; i < circs.length; i++){
+        for (var i = 0; i < circs.length; i++){
             circleFactory(circs[i].attrs.x, circs[i].attrs.y);
             doUpdate();
         }
 
-        doUpdate();
+        setInterval(doUpdate, 1000);
     </script>
 {{/if}}
