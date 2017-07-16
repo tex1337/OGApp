@@ -2,6 +2,10 @@ body {
     width: 100%;
 }
 
+#container{
+    padding-left: 130px;
+}
+
 #crudForm{
     margin-top: 20px;
 }
