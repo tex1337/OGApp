@@ -91,26 +91,24 @@ app.post('/', function(req, res){
         case "Delete":
             Drawing.where({ "filename": fname }).findOneAndRemove(function(err, doc){
                 var msg = "";
-                if(!err){
-                    msg = "Deleted file: " + doc.filename;
-                    res.render('error',
-                        {
-                            message: msg,
-                            error:{
-                                status: "Successfully deleted file from DB."
-                            }
-                        });
-                } else {
-                    msg = "Failed to run query!";
+                if(doc === null) {
+                    msg = "Failed to delete " + fname + "!";
                     res.render('error', {
                         messsage: msg,
-                        error:{
+                        error: {
                             status: "Failed to find " + fname + " in database"
                         }
                     });
+                } else {
+                    msg = "Deleted file: " + fname;
+                    res.render('error',
+                        {
+                            message: msg,
+                            error: {
+                                status: "Successfully deleted file from DB."
+                            }
+                        });
                 }
-
-
             });
             break;
 
