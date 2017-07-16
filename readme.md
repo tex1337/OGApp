@@ -43,6 +43,8 @@ To combat the fact that there can be overlaps in the creation and now
 and again when placing the circle in an entrapped way, circles that have
 been moused-over are pulled to the top to compensate for overlapping.
 
+To delete a circle from the canvas, simply double-click on it.
+
 ### Saving
 Files are saved to the database using a simple schema of filename and the
 data JSON object for the drawing. New files require only the filename to
