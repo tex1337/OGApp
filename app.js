@@ -74,7 +74,13 @@ app.post('/', function(req, res){
                    res.render('error', {message: "Failed to run query!", error:{status:err}});
                }
                if(doc === null){
-                   res.render('error', {message: "Query ran and returned no results", error:{status:err}});
+                   res.render('error',
+                       {
+                           message: "Failed to Load file " + fname + "!",
+                           error:{
+                               status: "Search of DB returned no file with that name."
+                           }
+                       });
                } else {
                    res.render('index',
                        {
@@ -94,7 +100,7 @@ app.post('/', function(req, res){
                 if(doc === null) {
                     msg = "Failed to delete " + fname + "!";
                     res.render('error', {
-                        messsage: msg,
+                        message: msg,
                         error: {
                             status: "Failed to find " + fname + " in database"
                         }
