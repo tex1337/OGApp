@@ -62,7 +62,6 @@ function doUpdate(){
     } catch (error){
         console.log("Failed to find the hidden input!");
     }
-
 }
 
 // Function circleFactory
@@ -124,6 +123,12 @@ function circleFactory(X, Y){
     doUpdate();
 }
 
+// Function isColliding
+// This function simply detects if
+// the coordinates are less than the
+// combined radii of the circles.
+// Foregoes Sqrt for sqr of reference,
+// faster than Math.sqrt.
 function isColliding(x1, y1, x2, y2){
     var dx = x2 - x1;
     var dy = y2 - y1;
@@ -135,10 +140,12 @@ function isColliding(x1, y1, x2, y2){
         return (Math.pow(dx, 2) + Math.pow(dy, 2)) < Math.pow(dr, 2);
     }
 }
-
+// Function getImageJSON
+// Function triggers the target stage
+// built-in method for serializing the
+// canvas image. Assigns the output to
+// a hidden form element.
 function getImageJSON(){
     var elem = document.getElementById('canvasJSON');
     elem.value = stage.toJSON();
 }
-
-setInterval(doUpdate, 100);
