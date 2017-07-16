@@ -41,6 +41,11 @@ app.post('/', function(req, res){
     db.on('error', console.error.bind(console, 'connection error: '));
 
     switch (action) {
+
+        case "New":
+            res.render('index', {
+                filename: ""
+            });
         case "Save":
             var newDrawing = {
                 filename: fname,
@@ -107,12 +112,9 @@ app.post('/', function(req, res){
                     });
                 } else {
                     msg = "Deleted file: " + fname;
-                    res.render('error',
+                    res.render('index',
                         {
-                            message: msg,
-                            error: {
-                                status: "Successfully deleted file from DB."
-                            }
+                            status: "Deleted"
                         });
                 }
             });

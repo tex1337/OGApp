@@ -1,22 +1,20 @@
 body {
-    width: 100%;
 }
 
-#container{
-    padding-left: 130px;
+#header .well{
+    padding:0px 20px 5px 20px;
+    text-align: center;
 }
 
-#crudForm{
-    margin-top: 20px;
+#header h1{
+    font-size:18pt;
 }
 
-.highlight{
-    display: inline-block;
-    padding:3px 10px;
-    background:red;
-    outline:1px solid black;
+#container .konvajs-content{
+    display:block;
+    margin:0 auto 20px auto;
 }
 
-.fGroup{
-    margin:10px 0;
+#container, #crudForm{
+
 }

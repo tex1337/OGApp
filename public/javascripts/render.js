@@ -140,6 +140,7 @@ function isColliding(x1, y1, x2, y2){
         return (Math.pow(dx, 2) + Math.pow(dy, 2)) < Math.pow(dr, 2);
     }
 }
+
 // Function getImageJSON
 // Function triggers the target stage
 // built-in method for serializing the
