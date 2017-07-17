@@ -25,7 +25,7 @@ var inputArea = new Konva.Rect({
 });
 
 // EventHandler click on inputArea
-inputArea.on('tap click', function(e) {
+inputArea.on('click touchstart', function(e) {
 
     // If this triggered, we weren't in a circle
     // so bash a new one out, only on left-mouse.
