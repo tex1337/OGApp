@@ -100,6 +100,17 @@ function circleFactory(X, Y){
         layer.draw();
     });
 
+    newCirc.on('dblclick', function(e) {
+        this.destroy();
+        e.cancelBubble = true;
+        layer.draw();
+    });
+
+    newCirc.on('dbltap', function(e) {
+        this.destroy();
+        layer.draw();
+    });
+
     newCirc.on('dragmove', function(e){
         if(Circles.children.length > 1){
             for(var i = 0; i < Circles.children.length; i++){
@@ -125,12 +136,6 @@ function circleFactory(X, Y){
                 }
             }
         }
-    });
-
-    newCirc.on('dblclick dbltap', function(e) {
-        this.destroy();
-        e.cancelBubble = true;
-        layer.draw();
     });
 
     // Push new circle and update the view
