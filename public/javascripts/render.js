@@ -25,7 +25,7 @@ var inputArea = new Konva.Rect({
 });
 
 // EventHandler click on inputArea
-inputArea.on('click', function(e) {
+inputArea.on('tap click', function(e) {
 
     // If this triggered, we weren't in a circle
     // so bash a new one out, only on left-mouse.
@@ -79,7 +79,7 @@ function circleFactory(X, Y){
         draggable: true
     });
 
-    newCirc.on('mouseover', function(e) {
+    newCirc.on('touchstart mouseover', function(e) {
         this.moveToTop();
         e.cancelBubble = true;
         layer.draw();
