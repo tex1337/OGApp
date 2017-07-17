@@ -25,12 +25,27 @@ var inputArea = new Konva.Rect({
 });
 
 // EventHandler click on inputArea
-inputArea.on('click touchstart', function(e) {
+inputArea.on('tap', function(e) {
 
     // If this triggered, we weren't in a circle
     // so bash a new one out, only on left-mouse.
+    var coords = stage.getPointerPosition();
+
+    circleFactory(coords.x, coords.y);
+    doUpdate();
+    console.log("Tapped!");
+    console.log(e);
+
+});
+
+inputArea.on('click', function(e) {
+
+    // If this triggered, we weren't in a circle
+    // so bash a new one out, only on left-mouse.
+    var coords = stage.getPointerPosition();
+
     if(e.evt.button === 0){
-        circleFactory(e.evt.layerX, e.evt.layerY);
+        circleFactory(coords.x, coords.y);
         doUpdate();
     }
 
