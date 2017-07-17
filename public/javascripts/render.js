@@ -79,7 +79,7 @@ function circleFactory(X, Y){
         draggable: true
     });
 
-    newCirc.on('touchstart mouseover', function(e) {
+    newCirc.on('mouseover', function(e) {
         this.moveToTop();
         e.cancelBubble = true;
         layer.draw();
