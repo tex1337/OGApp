@@ -38,7 +38,7 @@ inputArea.on('tap', function(e) {
 
 });
 
-inputArea.on('click', function(e) {
+inputArea.on('mousedown', function(e) {
 
     // If this triggered, we weren't in a circle
     // so bash a new one out, only on left-mouse.
@@ -46,7 +46,7 @@ inputArea.on('click', function(e) {
 
     if(e.evt.button === 0){
         circleFactory(coords.x, coords.y);
-        doUpdate();
+        layer.draw();
     }
 
 });
@@ -106,36 +106,13 @@ function circleFactory(X, Y){
         layer.draw();
     });
 
-    newCirc.on('dbltap', function(e) {
+    newCirc.on('dbltap', function() {
         this.destroy();
         layer.draw();
     });
 
-    newCirc.on('dragmove', function(e){
-        if(Circles.children.length > 1){
-            for(var i = 0; i < Circles.children.length; i++){
-
-                var c1 = {x: this.attrs.x, y: this.attrs.y};
-                var c2 = {x: Circles.children[i].attrs.x, y: Circles.children[i].attrs.y};
-
-                if(c1.x !== 0 && c1.y !== 0){
-                    var circleReference = Circles.children[i];
-
-                    if(isColliding(c1.x, c1.y, c2.x, c2.y)){
-                        // Figure out intersection midpoint
-                        var midx = 0.5*(c1.x + c2.x);
-                        var midy = 0.5*(c1.y + c2.y);
-
-                        // Distance vector between C1, C2.
-                        var dist = Math.sqrt(Math.pow((c2.x - c1.x), 2) + Math.pow((c2.y - c1.y), 2));
-
-                        // Solve for C1 new coordinates
-                        this.attrs.x = midx + 98 * (c1.x - c2.x) / dist;
-                        this.attrs.y = midy + 98 * (c1.y - c2.y) / dist;
-                    }
-                }
-            }
-        }
+    newCirc.on('dragmove', function(e) {
+        resolveCollisions(e.target);
     });
 
     // Push new circle and update the view
@@ -149,15 +126,62 @@ function circleFactory(X, Y){
 // combined radii of the circles.
 // Foregoes Sqrt for sqr of reference,
 // faster than Math.sqrt.
-function isColliding(x1, y1, x2, y2){
+function isColliding(x1, y1, x2, y2, sr){
     var dx = x2 - x1;
     var dy = y2 - y1;
-    var dr = 100 + 2;
+    var dr = sr + 50;
 
     if(dx === 0 && dy === 0){
         return false;
     } else {
         return (Math.pow(dx, 2) + Math.pow(dy, 2)) < Math.pow(dr, 2);
+    }
+}
+
+// Function resolveCollisions
+// This function finds all circles in
+// vicinity of the owner circle and
+// recursively solves the collisions
+// for each circle in the chain.
+
+function resolveCollisions(owner){
+    var searchRadius = 80;
+    var neighbours = [];
+    var c1 = owner.attrs;
+
+    Circles.children.forEach(function(child){
+        var c2 = child.attrs;
+
+        if(isColliding(c1.x, c1.y, c2.x, c2.y, searchRadius)){
+            neighbours.push(child);
+        }
+
+    });
+
+    neighbours.forEach(function(n){
+        var c2 = n.attrs;
+        if(isColliding(c1.x, c1.y, c2.x, c2.y, 50)){
+            var dist = Math.abs(Math.sqrt(Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2)));
+            var midX = (c1.x + c2.x) / 2;
+            var midY = (c1.y + c2.y) / 2;
+
+            owner.position({
+                x: (midX + 50 * (c1.x - c2.x) / dist),
+                y: (midY + 50 * (c1.y - c2.y) / dist)
+            });
+
+            n.position({
+                x: (midX + 50 * (c2.x - c1.x) / dist),
+                y: (midY + 50 * (c2.y - c1.y) / dist)
+            });
+
+            layer.draw();
+            resolveCollisions(n);
+        }
+    });
+
+    // Base case to prevent stack limit breaching.
+    if(! owner){
     }
 }
 
