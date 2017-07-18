@@ -19,6 +19,7 @@ mongodb web app where you can.
 ### Notes on Implementation
 
 - Fully implemented all requested functionality.
+- In future, an easy to add feature could prevent the circles leaving the canvas area, with simple |x,y| limits.
 - Used Konva lib for simplifying serialization and mouseevent
 handling. Don't Re-invent the wheel.
 - Wrote code for collision detection, didn't use any helper libs
